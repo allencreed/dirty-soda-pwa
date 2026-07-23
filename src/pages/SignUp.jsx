@@ -5,7 +5,7 @@ export default function SignUpPage() {
   return (
     <Flex minH="100dvh" align="center" justify="center" p={4}>
       <Box w="full" maxW="sm">
-        <SignUp routing="path" path="/sign-up" signInUrl="/sign-in" afterSignUpUrl="/" />
+        <SignUp routing="hash" afterSignUpUrl="/" />
       </Box>
     </Flex>
   )
