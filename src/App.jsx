@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react'
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
-import { Box } from '@chakra-ui/react'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from '@clerk/clerk-react'
+import { Box } from '@chakra-ui/react'
 import { CartProvider } from './context/CartContext.jsx'
 import MenuPage from './pages/Menu.jsx'
 import AdminPage from './pages/AdminPage.jsx'
@@ -17,21 +16,9 @@ function PrivateRoute({ children }) {
   return isSignedIn ? children : <Navigate to="/sign-in" replace />
 }
 
-function RedirectOnAuth() {
-  const { isSignedIn, isLoaded } = useAuth()
-  const navigate = useNavigate()
-  useEffect(() => {
-    if (isLoaded && isSignedIn) {
-      navigate('/', { replace: true })
-    }
-  }, [isLoaded, isSignedIn, navigate])
-  return null
-}
-
 export default function App() {
   return (
     <CartProvider>
-      <RedirectOnAuth />
       <Box minH="100dvh" pb={['24', null, '0']}>
         <Routes>
           <Route path="/sign-in" element={<SignInPage />} />
