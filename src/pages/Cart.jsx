@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { useCart } from '../context/CartContext.jsx'
 import { Box, Heading, VStack, Text, Button, HStack, Icon, Badge, useToast, Spinner, Center } from '@chakra-ui/react'
 import { FiTrash2, FiMinus, FiPlus } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@clerk/clerk-react'
+import { API_BASE } from '../utils/api.js'
 
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, total, clearCart, syncing } = useCart()
@@ -16,16 +18,20 @@ export default function CartPage() {
     setCheckingOut(true)
     try {
       const token = await getToken()
-      const res = await fetch('/api/orders/session', {
+      const res = await fetch(`${API_BASE}/api/orders/session`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token || ''}` },
-        body: JSON.stringify({ items: cart, total })
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token || ''}`,
+        },
+        body: JSON.stringify({ items: cart, total }),
       })
       const data = await res.json()
       if (data.url) window.location.href = data.url
       else throw new Error('No checkout URL')
     } catch (e) {
       toast({ title: 'Checkout failed', status: 'error' })
+    } finally {
       setCheckingOut(false)
     }
   }
@@ -52,7 +58,7 @@ export default function CartPage() {
         </Box>
       ) : (
         <VStack spacing={3} align="stretch">
-          {cart.map(item => {
+          {cart.map((item) => {
             const mods = Array.isArray(item.modifiers) ? item.modifiers : []
             const modTotal = mods.reduce((a, b) => a + (b.priceDelta || 0), 0)
             const line = (item.basePrice + modTotal) * (item.quantity || 1)

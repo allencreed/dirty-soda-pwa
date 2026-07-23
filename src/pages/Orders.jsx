@@ -23,7 +23,7 @@ export default function OrdersPage() {
       const token = await getToken()
       if (!token) return
       try {
-        const res = await fetch('/api/orders', { headers: { Authorization: `Bearer ${token}` } })
+        const res = await fetch(`${API_BASE}/api/orders`, { headers: { Authorization: `Bearer ${token}` } })
         if (!res.ok) throw new Error()
         const data = await res.json()
         if (!cancelled) setOrders(data)

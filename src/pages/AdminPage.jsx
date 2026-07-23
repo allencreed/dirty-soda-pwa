@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Box, Heading, VStack, Text, Button, Input, Textarea, FormControl, FormLabel, HStack, Icon, useToast, SimpleGrid, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, NumberInput, NumberInputField, Switch, useBreakpointValue } from '@chakra-ui/react'
 import { FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi'
 import { useAuth } from '@clerk/clerk-react'
+import { API_BASE } from '../utils/api.js'
 
 export default function AdminPage() {
   const [items, setItems] = useState([])
@@ -17,7 +18,7 @@ export default function AdminPage() {
   const load = async () => {
     const token = await getToken()
     if (!token) return navigate('/sign-in')
-    const res = await fetch('/api/admin/menu', { headers: { Authorization: `Bearer ${token}` } })
+    const res = await fetch(`${API_BASE}/api/admin/menu`, { headers: { Authorization: `Bearer ${token}` } })
     if (!res.ok) return navigate('/sign-in')
     setItems(await res.json())
   }
@@ -27,7 +28,7 @@ export default function AdminPage() {
   const save = async () => {
     const token = await getToken()
     const payload = { ...form, basePrice: Number(form.basePrice) }
-    const url = editingId ? `/api/admin/menu/${editingId}` : '/api/admin/menu'
+    const url = editingId ? `${API_BASE}/api/admin/menu/${editingId}` : `${API_BASE}/api/admin/menu`
     const method = editingId ? 'PUT' : 'POST'
     const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify(payload) })
     if (!res.ok) return toast({ title: 'Save failed', status: 'error' })
@@ -40,7 +41,7 @@ export default function AdminPage() {
 
   const remove = async (id) => {
     const token = await getToken()
-    const res = await fetch(`/api/admin/menu/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } })
+    const res = await fetch(`${API_BASE}/api/admin/menu/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } })
     if (!res.ok) return toast({ title: 'Delete failed', status: 'error' })
     toast({ title: 'Deleted', status: 'success' })
     load()

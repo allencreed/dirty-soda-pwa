@@ -24,7 +24,7 @@ export default function BottomNav() {
 
   return (
     <Box
-      display={{ base: 'flex', md: 'none' }}
+      display="flex"
       position="fixed"
       bottom={0}
       left={0}
