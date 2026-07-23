@@ -12,24 +12,28 @@ import SignUpPage from './pages/SignUp.jsx'
 
 function PrivateRoute({ children }) {
   const { isSignedIn, isLoaded } = useAuth()
-  if (!isLoaded) return <Box p={6} textAlign="center">Loading...</Box>
+  if (!isLoaded) {
+    return (
+      <Box p={6} textAlign="center">
+        <Box>Loading...</Box>
+      </Box>
+    )
+  }
   return isSignedIn ? children : <Navigate to="/sign-in" replace />
 }
 
 export default function App() {
   return (
     <CartProvider>
-      <Box minH="100dvh" pb={['24', null, '0']}>
-        <Routes>
-          <Route path="/sign-in" element={<SignInPage />} />
-          <Route path="/sign-up" element={<SignUpPage />} />
-          <Route path="/" element={<PrivateRoute><MenuPage /></PrivateRoute>} />
-          <Route path="/admin" element={<PrivateRoute><AdminPage /></PrivateRoute>} />
-          <Route path="/cart" element={<PrivateRoute><CartPage /></PrivateRoute>} />
-          <Route path="/orders" element={<PrivateRoute><OrdersPage /></PrivateRoute>} />
-        </Routes>
-        <BottomNav />
-      </Box>
+      <Routes>
+        <Route path="/sign-in" element={<SignInPage />} />
+        <Route path="/sign-up" element={<SignUpPage />} />
+        <Route path="/" element={<PrivateRoute><MenuPage /></PrivateRoute>} />
+        <Route path="/admin" element={<PrivateRoute><AdminPage /></PrivateRoute>} />
+        <Route path="/cart" element={<PrivateRoute><CartPage /></PrivateRoute>} />
+        <Route path="/orders" element={<PrivateRoute><OrdersPage /></PrivateRoute>} />
+      </Routes>
+      <BottomNav />
     </CartProvider>
   )
 }
