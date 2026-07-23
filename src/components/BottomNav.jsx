@@ -1,6 +1,8 @@
-import { NavLink } from 'react-router-dom'
-import { Box, Flex, Text } from '@chakra-ui/react'
-import { FiHome, FiShoppingCart, FiClipboard, FiSettings } from 'react-icons/fi'
+import { NavLink, useLocation } from 'react-router-dom'
+import { Box, Flex, Text, IconButton } from '@chakra-ui/react'
+import { FiHome, FiShoppingCart, FiClipboard, FiSettings, FiLogOut } from 'react-icons/fi'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '@clerk/clerk-react'
 
 const items = [
   { to: '/', icon: FiHome, label: 'Menu' },
@@ -10,6 +12,16 @@ const items = [
 ]
 
 export default function BottomNav() {
+  const { signOut } = useAuth()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const isAuthPage = location.pathname.startsWith('/sign-')
+
+  const handleSignOut = async () => {
+    await signOut()
+    navigate('/sign-in', { replace: true })
+  }
+
   return (
     <Box
       display={{ base: 'flex', md: 'none' }}
@@ -32,6 +44,19 @@ export default function BottomNav() {
           )}
         </NavLink>
       ))}
+      {!isAuthPage && (
+        <IconButton
+          aria-label="Sign out"
+          position="absolute"
+          right={3}
+          bottom={3}
+          variant="ghost"
+          colorScheme="red"
+          size="sm"
+          onClick={handleSignOut}
+          icon={<FiLogOut />}
+        />
+      )}
     </Box>
   )
 }
