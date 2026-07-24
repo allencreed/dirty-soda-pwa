@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { HashRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import { ClerkProvider } from '@clerk/clerk-react'
 import { ChakraProvider, extendTheme, Spinner, Center, Box, Text } from '@chakra-ui/react'
 import App from './App.jsx'
@@ -35,9 +35,9 @@ function Root() {
   return (
     <ClerkProvider publishableKey={key}>
       <ChakraProvider theme={theme}>
-        <HashRouter>
+        <BrowserRouter>
           <App />
-        </HashRouter>
+        </BrowserRouter>
       </ChakraProvider>
     </ClerkProvider>
   )
