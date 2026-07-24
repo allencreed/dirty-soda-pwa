@@ -27,8 +27,11 @@ export default function CartPage() {
         body: JSON.stringify({ items: cart, total }),
       })
       const data = await res.json()
-      if (data.url) window.location.href = data.url
-      else throw new Error('No checkout URL')
+      if (data.url) {
+        const orderId = data.orderId || ''
+        const separator = data.url.includes('?') ? '&' : '?'
+        window.location.href = `${data.url}${separator}orderId=${orderId}`
+      } else throw new Error('No checkout URL')
     } catch (e) {
       toast({ title: 'Checkout failed', status: 'error' })
     } finally {

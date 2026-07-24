@@ -8,6 +8,8 @@ import AdminPage from './pages/AdminPage.jsx'
 import CartPage from './pages/Cart.jsx'
 import OrdersPage from './pages/Orders.jsx'
 import BottomNav from './components/BottomNav.jsx'
+import CheckoutSuccess from './pages/CheckoutSuccess.jsx'
+import CheckoutCancel from './pages/CheckoutCancel.jsx'
 
 function PrivateRoute({ children }) {
   const { isSignedIn, isLoaded } = useAuth()
@@ -41,6 +43,8 @@ export default function App() {
         <Route path="/admin" element={<PrivateRoute><AdminPage /></PrivateRoute>} />
         <Route path="/cart" element={<PrivateRoute><CartPage /></PrivateRoute>} />
         <Route path="/orders" element={<PrivateRoute><OrdersPage /></PrivateRoute>} />
+        <Route path="/checkout-success" element={<PrivateRoute><CheckoutSuccess /></PrivateRoute>} />
+        <Route path="/checkout-cancel" element={<PrivateRoute><CheckoutCancel /></PrivateRoute>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <BottomNav />
