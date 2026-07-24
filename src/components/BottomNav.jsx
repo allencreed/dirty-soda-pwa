@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom'
 import { Box, Flex, Text, IconButton } from '@chakra-ui/react'
-import { FiHome, FiShoppingCart, FiClipboard, FiSettings, FiLogOut } from 'react-icons/fi'
+import { FiHome, FiShoppingCart, FiClipboard, FiSettings, FiLogOut, FiCheckCircle, FiXCircle } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@clerk/clerk-react'
 
@@ -9,6 +9,8 @@ const items = [
   { to: '/cart', icon: FiShoppingCart, label: 'Cart' },
   { to: '/orders', icon: FiClipboard, label: 'Orders' },
   { to: '/admin', icon: FiSettings, label: 'Admin' },
+  { to: '/checkout-success', icon: FiCheckCircle, label: 'Success' },
+  { to: '/checkout-cancel', icon: FiXCircle, label: 'Cancel' },
 ]
 
 export default function BottomNav() {
