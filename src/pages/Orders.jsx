@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Box, Heading, Text, Badge, VStack, HStack, Button } from '@chakra-ui/react'
 import { useAuth } from '@clerk/clerk-react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { API_BASE } from '../utils/api.js'
 
 const statusColors = { pending: 'yellow', paid: 'green', preparing: 'blue', ready: 'teal', picked_up: 'gray' }
 

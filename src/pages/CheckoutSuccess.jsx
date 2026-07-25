@@ -13,7 +13,7 @@ export default function CheckoutSuccess() {
         <Icon as={FiCheckCircle} boxSize={16} color="green.500" />
         <Heading size="lg">Payment Successful</Heading>
         <Text color="gray.500">
-          {orderId ? `Order #${orderId.slice(-6)} confirmed.` : 'Your order has been confirmed.'}
+          {orderId ? `Order confirmed.` : 'Your order has been confirmed.'}
         </Text>
         <Button colorScheme="brand" onClick={() => navigate('/orders')}>View Orders</Button>
         <Button variant="ghost" onClick={() => navigate('/')}>Back to Menu</Button>
