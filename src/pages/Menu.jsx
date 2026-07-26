@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useCart } from '../context/CartContext.jsx'
-import { Box, Heading, SimpleGrid, Text, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, VStack, ModalFooter, Checkbox, useBreakpointValue, Image, Skeleton, Stack } from '@chakra-ui/react'
+import { Box, Heading, SimpleGrid, Text, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, VStack, ModalFooter, Checkbox, useBreakpointValue, Image, Skeleton, Stack, useToast } from '@chakra-ui/react'
 import { API_BASE } from '../utils/api.js'
 
 export default function MenuPage() {
@@ -8,6 +8,7 @@ export default function MenuPage() {
   const [sel, setSel] = useState(null)
   const [selectedModifierIds, setSelectedModifierIds] = useState([])
   const { addToCart } = useCart()
+  const toast = useToast()
   const columns = useBreakpointValue({ base: 1, sm: 2, md: 3, lg: 4 })
 
   useEffect(() => {
@@ -26,6 +27,21 @@ export default function MenuPage() {
   const modifiers = Array.isArray(sel?.modifiers) ? sel.modifiers : []
   const selectedMods = modifiers.filter((m) => selectedModifierIds.includes(m.id))
   const total = (sel?.basePrice || 0) + selectedMods.reduce((a, b) => a + (b.priceDelta || 0), 0)
+
+  const handleAddToCart = () => {
+    if (!sel) return
+    addToCart({
+      ...sel,
+      modifiers: selectedMods,
+      quantity: 1,
+    })
+    setSel(null)
+    toast({
+      title: 'Added to cart',
+      status: 'success',
+      duration: 1500,
+    })
+  }
 
   return (
     <Box p={4} maxW="1000px" mx="auto">
@@ -74,7 +90,7 @@ export default function MenuPage() {
             <Text fontWeight="bold" fontSize="lg" color="brand.600">Total: ${total.toFixed(2)}</Text>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="brand" w="full" onClick={() => { addToCart({ ...sel, selectedModifiers: selectedMods }); setSel(null) }}>Add to Cart</Button>
+            <Button colorScheme="brand" w="full" onClick={handleAddToCart}>Add to Cart</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
