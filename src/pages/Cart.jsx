@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { useCart } from '../context/CartContext.jsx'
 import { Box, Heading, VStack, Text, Button, HStack, Icon, Badge, useToast, Spinner, Center } from '@chakra-ui/react'
-import { FiTrash2, FiMinus, FiPlus } from 'react-icons/fi'
+import { FiTrash2 } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@clerk/clerk-react'
 import { API_BASE } from '../utils/api.js'
+import { apiFetch } from '../utils/apiFetch.js'
 
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, total, clearCart, syncing } = useCart()
@@ -18,14 +19,10 @@ export default function CartPage() {
     setCheckingOut(true)
     try {
       const token = await getToken()
-      const res = await fetch(`${API_BASE}/api/orders/session`, {
+      const res = await apiFetch('/api/orders/session', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token || ''}`,
-        },
-        body: JSON.stringify({ items: cart, total }),
-      })
+        body: JSON.stringify({ items: cart, total })
+      }, token)
       const data = await res.json()
       if (data.url) {
         window.location.href = data.url

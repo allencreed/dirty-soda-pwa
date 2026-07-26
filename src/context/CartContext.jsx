@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { useAuth } from '@clerk/clerk-react'
 import { API_BASE } from '../utils/api.js'
+import { apiFetch } from '../utils/apiFetch.js'
 
 const CartContext = createContext()
 
@@ -16,30 +17,33 @@ export function CartProvider({ children }) {
     if (!isSignedIn) return
     let cancelled = false
     setSyncing(true)
-    getToken().then(token => {
+    getToken().then(async token => {
       if (cancelled || !token) { setSyncing(false); return }
-      fetch(`${API_BASE}/api/cart`, { headers: { Authorization: `Bearer ${token}` } })
-        .then(r => { if (r.ok) return r.json(); throw new Error() })
-        .then(data => {
-          if (!cancelled) {
-            const merged = (Array.isArray(data) ? data : []).map(item => ({
-              id: item.id,
-              menuItemId: item.menuItemId,
-              name: item.name || '',
-              description: item.description || '',
-              basePrice: item.basePrice || 0,
-              modifiers: Array.isArray(item.modifiers) ? item.modifiers : [],
-              quantity: item.quantity || 1,
-              image: item.image || null,
-              category: item.category || 'sodas',
-              isActive: item.isActive ?? true
-            }))
-            setCart(merged)
-            localStorage.setItem('cart', JSON.stringify(merged))
-          }
-        })
-        .catch(() => {})
-        .finally(() => { if (!cancelled) setSyncing(false) })
+      try {
+        const res = await apiFetch('/api/cart', {}, token)
+        if (!res.ok) throw new Error()
+        const data = await res.json()
+        if (!cancelled) {
+          const merged = (Array.isArray(data) ? data : []).map(item => ({
+            id: item.id,
+            menuItemId: item.menuItemId,
+            name: item.name || '',
+            description: item.description || '',
+            basePrice: item.basePrice || 0,
+            modifiers: Array.isArray(item.modifiers) ? item.modifiers : [],
+            quantity: item.quantity || 1,
+            image: item.image || null,
+            category: item.category || 'sodas',
+            isActive: item.isActive ?? true
+          }))
+          setCart(merged)
+          localStorage.setItem('cart', JSON.stringify(merged))
+        }
+      } catch {
+        if (!cancelled) setCart([])
+      } finally {
+        if (!cancelled) setSyncing(false)
+      }
     })
     return () => { cancelled = true }
   }, [isLoaded, isSignedIn, getToken])
@@ -51,11 +55,10 @@ export function CartProvider({ children }) {
     const token = await getToken()
     if (!token) return
     try {
-      await fetch(`${API_BASE}/api/cart`, {
+      await apiFetch('/api/cart', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ items: next })
-      })
+      }, token)
     } catch {
       // non-blocking
     }

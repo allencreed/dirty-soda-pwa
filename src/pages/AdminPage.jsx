@@ -4,6 +4,7 @@ import { Box, Heading, VStack, Text, Button, Input, Textarea, FormControl, FormL
 import { FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi'
 import { useAuth } from '@clerk/clerk-react'
 import { API_BASE } from '../utils/api.js'
+import { apiFetch } from '../utils/apiFetch.js'
 
 export default function AdminPage() {
   const [items, setItems] = useState([])
@@ -18,7 +19,7 @@ export default function AdminPage() {
   const load = async () => {
     const token = await getToken()
     if (!token) return navigate('/sign-in')
-    const res = await fetch(`${API_BASE}/api/admin/menu`, { headers: { Authorization: `Bearer ${token}` } })
+    const res = await apiFetch('/api/admin/menu', {}, token)
     if (!res.ok) return navigate('/sign-in')
     setItems(await res.json())
   }
@@ -28,9 +29,9 @@ export default function AdminPage() {
   const save = async () => {
     const token = await getToken()
     const payload = { ...form, basePrice: Number(form.basePrice) }
-    const url = editingId ? `${API_BASE}/api/admin/menu/${editingId}` : `${API_BASE}/api/admin/menu`
+    const url = editingId ? `/api/admin/menu/${editingId}` : '/api/admin/menu'
     const method = editingId ? 'PUT' : 'POST'
-    const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify(payload) })
+    const res = await apiFetch(url, { method, body: JSON.stringify(payload) }, token)
     if (!res.ok) return toast({ title: 'Save failed', status: 'error' })
     toast({ title: editingId ? 'Updated' : 'Created', status: 'success' })
     setForm({ name: '', description: '', basePrice: '', image: '', category: 'signature', isActive: true })
@@ -41,23 +42,23 @@ export default function AdminPage() {
 
   const remove = async (id) => {
     const token = await getToken()
-    const res = await fetch(`${API_BASE}/api/admin/menu/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } })
+    const res = await apiFetch(`/api/admin/menu/${id}`, { method: 'DELETE' }, token)
     if (!res.ok) return toast({ title: 'Delete failed', status: 'error' })
     toast({ title: 'Deleted', status: 'success' })
     load()
   }
 
   return (
-    <Box p={4} maxW="1000px" mx="auto">
+    <Box p={4} maxW="1000px" mx="auto" pb="24">
       <HStack justify="space-between" mb={4}>
-        <Heading size="lg">Admin Menu</Heading>
+        <Heading size="lg" color="gray.900">Admin Menu</Heading>
         <Button colorScheme="brand" leftIcon={<Icon as={FiPlus} />} onClick={() => { setEditingId(null); setForm({ name: '', description: '', basePrice: '', image: '', category: 'signature', isActive: true }); setIsModalOpen(true) }}>New Item</Button>
       </HStack>
 
       <SimpleGrid columns={columns} gap={3}>
         {items.map(item => (
-          <Box key={item.id} borderWidth="1px" borderRadius="lg" p={4} bg="white">
-            <Text fontWeight="bold">{item.name}</Text>
+          <Box key={item.id} borderWidth="1px" borderRadius="xl" p={4} bg="white" borderColor="surface.200">
+            <Text fontWeight="bold" color="gray.900">{item.name}</Text>
             <Text fontSize="sm" color="gray.500">{item.description}</Text>
             <Text color="brand.600" fontWeight="bold">${Number(item.basePrice).toFixed(2)}</Text>
             <HStack mt={3}>
