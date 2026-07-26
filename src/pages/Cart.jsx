@@ -46,8 +46,8 @@ export default function CartPage() {
   }
 
   return (
-    <Box p={4} maxW="600px" mx="auto">
-      <Heading size="lg" mb={4}>Your Cart</Heading>
+    <Box p={4} maxW="600px" mx="auto" pb="24">
+      <Heading size="lg" mb={4} color="gray.900">Your Cart</Heading>
       {syncing ? (
         <Box textAlign="center" py={10}>
           <Text color="gray.500">Syncing cart...</Text>
@@ -64,30 +64,41 @@ export default function CartPage() {
             const modTotal = mods.reduce((a, b) => a + (b.priceDelta || 0), 0)
             const line = (item.basePrice + modTotal) * (item.quantity || 1)
             return (
-              <HStack key={item.id} justify="space-between" align="flex-start" borderWidth="1px" borderRadius="md" p={3} bg="white">
-                <Box minW="0" flex="1">
-                  <Text fontWeight="bold" noOfLines={1}>{item.name}</Text>
-                  <HStack mt={2}>
-                    <Button size="xs" variant="outline" onClick={() => updateQuantity(item.id, -1)}><Icon as={FiMinus} /></Button>
-                    <Badge>{item.quantity}</Badge>
-                    <Button size="xs" variant="outline" onClick={() => updateQuantity(item.id, 1)}><Icon as={FiPlus} /></Button>
+              <Box key={item.id} borderWidth="1px" borderRadius="xl" p={4} bg="white" borderColor="surface.200">
+                <VStack align="stretch" spacing={3}>
+                  <HStack justify="space-between">
+                    <Box>
+                      <Text fontWeight="bold" color="gray.900">{item.name}</Text>
+                      {mods.length > 0 && (
+                        <Text fontSize="xs" color="brand.600" mt={1}>
+                          {mods.map(m => `+${m.name}`).join(', ')}
+                        </Text>
+                      )}
+                    </Box>
+                    <Button size="sm" colorScheme="red" variant="ghost" onClick={() => removeFromCart(item.id)}>Remove</Button>
                   </HStack>
-                  {mods.map((m, idx) => <Text key={idx} fontSize="xs" color="brand.600">+{m.name}</Text>)}
-                </Box>
-                <HStack flexShrink={0}>
-                  <Text fontWeight="bold">${line.toFixed(2)}</Text>
-                  <Button size="sm" colorScheme="red" variant="ghost" onClick={() => removeFromCart(item.id)}><Icon as={FiTrash2} /></Button>
-                </HStack>
-              </HStack>
+                  <HStack justify="space-between" align="center">
+                    <HStack>
+                      <Button size="xs" variant="outline" onClick={() => updateQuantity(item.id, -1)}>-</Button>
+                      <Badge colorScheme="brand">{item.quantity}</Badge>
+                      <Button size="xs" variant="outline" onClick={() => updateQuantity(item.id, 1)}>+</Button>
+                    </HStack>
+                    <Text fontWeight="bold" color="brand.600">${line.toFixed(2)}</Text>
+                  </HStack>
+                </VStack>
+              </Box>
             )
           })}
-          <HStack justify="space-between" pt={4}>
-            <Text fontSize="xl" fontWeight="bold">Total: ${total.toFixed(2)}</Text>
-            <Button colorScheme="brand" onClick={checkout} isLoading={checkingOut}>
-              {checkingOut ? 'Redirecting...' : 'Checkout'}
-            </Button>
-          </HStack>
-          <Button variant="ghost" colorScheme="red" onClick={clearCart} size="sm">Clear cart</Button>
+          <Box borderWidth="1px" borderRadius="xl" p={4} bg="surface.50" borderColor="surface.200">
+            <HStack justify="space-between">
+              <Text fontSize="lg" fontWeight="bold" color="gray.900">Total</Text>
+              <Text fontSize="lg" fontWeight="bold" color="brand.600">${total.toFixed(2)}</Text>
+            </HStack>
+          </Box>
+          <Button colorScheme="brand" size="lg" w="full" onClick={checkout} isLoading={checkingOut}>
+            {checkingOut ? 'Redirecting...' : 'Checkout'}
+          </Button>
+          <Button variant="ghost" colorScheme="red" onClick={clearCart} size="sm" w="full">Clear cart</Button>
         </VStack>
       )}
     </Box>

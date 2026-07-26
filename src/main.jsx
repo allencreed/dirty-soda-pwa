@@ -8,12 +8,27 @@ import './index.css'
 
 const theme = extendTheme({
   colors: {
-    brand: { 50: '#fffaf0', 100: '#feebc8', 500: '#ed8936', 600: '#dd6b20', 900: '#1a202c' }
+    brand: {
+      50: '#fff8f1',
+      100: '#ffedd5',
+      200: '#fed7aa',
+      300: '#fdba74',
+      400: '#fb923c',
+      500: '#f97316',
+      600: '#ea580c',
+      700: '#c2410c',
+      900: '#7c2d12',
+    },
+    surface: {
+      50: '#faf9f7',
+      100: '#f5f3ef',
+      200: '#e7e5e4',
+    },
   },
   fonts: {
     heading: "Inter, ui-sans-serif, system-ui",
-    body: "Inter, ui-sans-serif, system-ui"
-  }
+    body: "Inter, ui-sans-serif, system-ui",
+  },
 })
 
 const key = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY

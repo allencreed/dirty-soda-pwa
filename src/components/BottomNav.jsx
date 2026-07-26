@@ -9,8 +9,6 @@ const items = [
   { to: '/cart', icon: FiShoppingCart, label: 'Cart' },
   { to: '/orders', icon: FiClipboard, label: 'Orders' },
   { to: '/admin', icon: FiSettings, label: 'Admin' },
-  { to: '/checkout-success', icon: FiCheckCircle, label: 'Success' },
-  { to: '/checkout-cancel', icon: FiXCircle, label: 'Cancel' },
 ]
 
 export default function BottomNav() {

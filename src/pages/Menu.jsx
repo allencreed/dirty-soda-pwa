@@ -48,19 +48,33 @@ export default function MenuPage() {
       <Heading size="lg" mb={4}>Menu</Heading>
       <SimpleGrid columns={columns} gap={3}>
         {items.map((item) => (
-          <Box key={item.id} borderWidth="1px" borderRadius="lg" overflow="hidden" bg="white" boxShadow="sm" cursor="pointer" onClick={() => open(item)} _hover={{ borderColor: 'brand.500', transform: 'translateY(-2px)', transition: 'all .2s' }}>
-            <Box bg="gray.100" h="140px" position="relative">
+          <Box
+            key={item.id}
+            borderWidth="1px"
+            borderRadius="2xl"
+            overflow="hidden"
+            bg="white"
+            borderColor="surface.200"
+            boxShadow="sm"
+            transition="all .2s ease"
+            _hover={{ borderColor: 'brand.300', transform: 'translateY(-2px)', boxShadow: 'md' }}
+            cursor="pointer"
+            onClick={() => open(item)}
+          >
+            <Box bg="surface.100" h="160px" position="relative">
               {item.image ? (
                 <Image src={item.image} alt={item.name} objectFit="cover" w="full" h="full" fallback={<Skeleton w="full" h="full" />} />
               ) : (
                 <Box w="full" h="full" display="flex" alignItems="center" justifyContent="center" color="gray.400" fontSize="xs">No Image</Box>
               )}
             </Box>
-            <Box p={3}>
-              <Text fontWeight="bold" fontSize="lg" noOfLines={1}>{item.name}</Text>
+            <Box p={4}>
+              <Text fontWeight="bold" fontSize="md" noOfLines={1} color="gray.900">{item.name}</Text>
               <Text color="gray.500" noOfLines={2} fontSize="sm" mt={1}>{item.description}</Text>
-              <Text fontWeight="bold" mt={2} fontSize="md" color="brand.600">${item.basePrice.toFixed(2)}</Text>
-              {item.modifiers?.length > 0 ? <Text fontSize="xs" color="gray.400" mt={1}>+{item.modifiers.length} add-ons</Text> : null}
+              <HStack justify="space-between" align="center" mt={3}>
+                <Text fontWeight="bold" fontSize="md" color="brand.600">${item.basePrice.toFixed(2)}</Text>
+                {item.modifiers?.length > 0 ? <Text fontSize="xs" color="gray.400">+{item.modifiers.length} add-ons</Text> : null}
+              </HStack>
             </Box>
           </Box>
         ))}
