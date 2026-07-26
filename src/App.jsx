@@ -10,6 +10,8 @@ import OrdersPage from './pages/Orders.jsx'
 import BottomNav from './components/BottomNav.jsx'
 import CheckoutSuccess from './pages/CheckoutSuccess.jsx'
 import CheckoutCancel from './pages/CheckoutCancel.jsx'
+import SignInPage from './pages/SignIn.jsx'
+import SignUpPage from './pages/SignUp.jsx'
 
 function PrivateRoute({ children }) {
   const { isSignedIn, isLoaded } = useAuth()
@@ -39,6 +41,8 @@ export default function App() {
     <CartProvider>
       <RedirectToMenu />
       <Routes>
+        <Route path="/sign-in" element={<SignInPage />} />
+        <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/" element={<PrivateRoute><MenuPage /></PrivateRoute>} />
         <Route path="/admin" element={<PrivateRoute><AdminPage /></PrivateRoute>} />
         <Route path="/cart" element={<PrivateRoute><CartPage /></PrivateRoute>} />
