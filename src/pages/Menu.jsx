@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useCart } from '../context/CartContext.jsx'
-import { Box, Heading, SimpleGrid, Text, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, VStack, ModalFooter, Checkbox, useBreakpointValue, Image, Skeleton, Stack, useToast } from '@chakra-ui/react'
+import { Box, Heading, SimpleGrid, Text, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, VStack, ModalFooter, Checkbox, useBreakpointValue, Image, Skeleton, Stack, useToast, HStack } from '@chakra-ui/react'
 import { API_BASE } from '../utils/api.js'
 
 export default function MenuPage() {

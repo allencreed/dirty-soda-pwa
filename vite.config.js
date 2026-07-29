@@ -12,7 +12,7 @@ export default defineConfig({
       manifest: {
         name: 'Georgia Fizz Co.',
         short_name: 'Georgia Fizz',
-        description: 'Fresh dirty sodas made to order',
+        description: 'Fresh sodas made to order',
         theme_color: '#ed8936',
         background_color: '#1a202c',
         display: 'standalone',
