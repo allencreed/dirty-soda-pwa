@@ -12,16 +12,10 @@ export default function MenuPage() {
   const columns = useBreakpointValue({ base: 1, sm: 2, md: 3, lg: 4 })
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/menu`).then(r => {
-      console.log('[Menu] fetch status', r.status)
-      return r.json()
-    }).then(data => {
-      console.log('[Menu] items', data)
-      setItems(data)
-    }).catch(err => {
-      console.log('[Menu] fetch error', err)
-      setItems([])
-    })
+    fetch(`${API_BASE}/api/menu`)
+      .then(r => r.json())
+      .then(setItems)
+      .catch(() => setItems([]))
   }, [])
 
   const open = (item) => {
